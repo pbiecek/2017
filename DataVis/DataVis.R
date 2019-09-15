@@ -45,14 +45,25 @@ selected <- c("Gra o tron", "Breaking Bad",
               "Sherlock", "Westworld")
 
 dat <- series2017 %>%
-  filter(Serie %in% selected)
+  dplyr::filter(Serie %in% selected)
+
+ggplot(dat, aes(id, UserRating, color=Season)) + 
+  geom_point(aes(size=UserVotes, shape=Season)) +
+  geom_smooth(se=FALSE, color="black") + 
+  scale_shape_discrete(solid=FALSE)+
+  scale_color_manual(values = c("red4", "red1", "grey", "black", "blue1", "blue4")) +
+  facet_grid(Serie ~ .) +
+  theme_light() + 
+  ggtitle("User ratings for selected TV series") + 
+  xlab("Episode No") + 
+  scale_y_continuous(trans = "log2", breaks = c(8,9,10))
+
 
 ggplot(dat, aes(id, UserRating)) + 
   geom_point(aes(color=Season, size=UserVotes)) +
   geom_smooth(se=FALSE, color="grey30") + 
   facet_grid(Serie~.) +
   theme_light() + theme(legend.position="none") +
-  scale_color_brewer(palette = 1, type = "qual") +
   ggtitle("User ratings for selected TV series") + 
   xlab("Episode No")
 
@@ -61,14 +72,138 @@ ggplot(dat, aes(id, UserRating)) +
 # Let's practice
 #
 
-mySer <- filter(dat, Serie == "Breaking Bad")
+mySer <- dplyr::filter(dat, Serie == "Breaking Bad")
 head(mySer)
 
 ggplot(mySer, aes(x = id, y = UserRating)) +
   geom_point() +
+  geom_smooth(color="red", se = FALSE) + 
+  geom_smooth(method = "lm") 
+  
+
+ggplot(mySer, aes(x = id, y = UserRating,
+                  size = UserVotes, shape = Season)) +
+  geom_point() +
+  geom_smooth(color="red", se = FALSE) 
+
+ggplot(mySer, aes(x = id, y = UserRating,
+                  size = UserVotes, color = Season)) +
+  geom_point() +
+  geom_smooth(se = FALSE) 
+
+ggplot(mySer, aes(x = id, y = UserRating,
+                  size = UserVotes, shape = Season)) +
+  geom_point() +
+  geom_smooth(color="red", se = FALSE) 
+
+pl <- ggplot(dat, aes(x = id, y = UserRating,
+                  size = UserVotes)) +
+  geom_point(aes(color = Season)) +
+  geom_smooth(color="red", se = FALSE) 
+
+pl + scale_color_manual(values = c("red4", "red1", "blue4", "blue1", "green4", "green1"))
+
+pl + scale_color_brewer(type="seq", palette = 5)
+
+pl + scale_x_continuous(breaks = seq(5,65,5), 
+                        limits = c(-20,100),
+                        labels = LETTERS[1:13])
+
+pl + coord_flip()
+
+pl + coord_polar()
+
+
+
+ggplot(mySer, aes(x = Season, y = UserRating,
+                  color = Season)) +
+  geom_boxplot()+
+  geom_point(position = position_jitter(width = 0.2, height = 0)) +
+  geom_smooth(color="red", se = FALSE) 
+
+
+ggplot(mySer, aes(x = Season, y = UserRating,
+                  color = Season)) +
+  geom_boxplot()+
+  geom_point(position = position_jitter(width = 0.2, height = 0)) +
+  geom_smooth(color="red", se = FALSE) +
+  theme_bw() + ggtitle("My plot") +
+  theme(title = element_text(size = 20))
+
+
+
+
+
+ggplot(mySer, aes(x = Season, fill = UserRating > 8.5)) +
+  geom_col()
+
+ggplot(mySer, aes(x = Season, fill = UserRating > 8.5)) +
+  geom_bar(position = "fill")
+
+ggplot(mySer, aes(x = Season, fill = UserRating > 8.5)) +
+  geom_bar(position = "dodge")
+
+
+ pl <- ggplot(mySer, aes(x = id, y = UserRating, 
+                  size = UserVotes, color = Season)) +
+  geom_point() +
+  geom_smooth(aes(group = Season), method = "lm", 
+              se = F, color="red")
+
+ pl + theme_classic()
+
+ggplot(mySer, aes(x = id, y = UserRating, 
+                  size = UserVotes)) +
+  geom_point(aes(color = Season)) +
+  geom_smooth(method = "lm", se = F) +
+  scale_size_continuous(range=c(1,10))
+
+
+
+ggplot(dat, aes(x = id, y = UserRating, 
+                  size = UserVotes)) +
+  geom_point(aes(color = Season)) +
+  geom_smooth(method = "lm", se = F) +
+  facet_wrap(~Serie, scales = "free_x")
+
+
+
+
+
+ggplot(mySer, aes(x = id, y = UserRating)) +
+  geom_point(aes(shape = UserVotes), size=10)
+ggplot(mySer, aes(x = id, y = UserRating)) +
+  geom_point(aes(shape = Season), size=10)
+
+ggplot(mySer, aes(x = id, y = UserRating)) +
+  geom_point(size=10)
+
+pl <- ggplot(mySer, aes(x = id, y = UserRating)) +
+  geom_point(size=10) +
   geom_smooth(se=FALSE) +
   geom_smooth(method = "lm", se=FALSE, color="red") 
   
+ggplot(mySer, aes(x = id, y = UserRating)) +
+  geom_point(size=10) + 
+  geom_boxplot()
+
+ggplot(mySer, aes(x = id, y = UserRating, color = Season)) +
+  geom_boxplot() +
+  geom_smooth(se=F) +
+  geom_point(size=2, alpha = 0.2) +
+  theme_bw()
+  
+
+ggplot(dat, aes(x = id, y = UserRating, color = Season)) +
+  geom_boxplot() +
+  geom_smooth(se=F) +
+  geom_point(size=2, alpha = 0.2) +
+  coord_
+
+
+
+pl + ggtitle("My new title")
+
 ggplot(mySer, aes(x = id, 
                       y = UserRating,
                       size=UserVotes)) +
